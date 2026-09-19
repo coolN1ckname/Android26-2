@@ -1,7 +1,8 @@
 package ru.urfu.droidpractice1
 
-import androidx.activity.ComponentActivity
 import android.os.Bundle
+import androidx.activity.ComponentActivity
+import com.bumptech.glide.Glide
 import ru.urfu.droidpractice1.databinding.ActivitySecondBinding
 
 class SecondActivity : ComponentActivity() {
@@ -10,10 +11,16 @@ class SecondActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivitySecondBinding.inflate(layoutInflater)
-        val view = binding.root
-        setContentView(view)
 
-        binding.toolbar.setNavigationOnClickListener { onBackPressedDispatcher.onBackPressed() }
+        binding = ActivitySecondBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        binding.backButton.setOnClickListener {
+            finish()
+        }
+
+        Glide.with(this)
+            .load("https://www.cossa.ru/upload/iblock/d55/tyz.jpg")
+            .into(binding.articleImage)
     }
 }
