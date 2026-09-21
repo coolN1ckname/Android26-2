@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
@@ -28,6 +29,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -37,6 +39,7 @@ import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import ru.urfu.droidpractice1.content.MainActivityScreen
 import ru.urfu.droidpractice1.ui.theme.DroidPractice1Theme
+import androidx.core.content.ContextCompat
 
 const val BOTTOM_PADDING = 16
 const val HEADER_FONT_SIZE = 20
@@ -105,6 +108,16 @@ fun ComposeArticleScreen(modifier: Modifier = Modifier) {
         }
     }
 
+    val articleText = """
+                    Стоковые изображения - это готовые фотографии и иллюстрации, которые можно использовать в проектах, презентациях и публикациях.
+                    
+                    Они помогают быстро подобрать подходящий визуальный материал без необходимости самостоятельно организовывать съёмку.
+                    
+                    Это невероятно удобно, к тому же среди них можно найти довольно много, так называемых, скрытых гемов, что на наш взгляд, повышает их значимость.
+                    
+                    Зачастую на них присутствуют вотермарки, но это довольно малая цена за их использование
+                """.trimIndent()
+
     DroidPractice1Theme {
 
         Scaffold { innerPadding ->
@@ -117,9 +130,9 @@ fun ComposeArticleScreen(modifier: Modifier = Modifier) {
                     .padding(16.dp)
             ) {
 
-//                Spacer(
-//                    modifier = Modifier.height(16.dp)
-//                )
+                Spacer(
+                    modifier = Modifier.height(16.dp)
+                )
 
                 Text(
                     text = "Стоковые изображения",
@@ -129,14 +142,15 @@ fun ComposeArticleScreen(modifier: Modifier = Modifier) {
                         bottom = BOTTOM_PADDING.dp
                     )
                 )
-                //Лайки и дизлайки
+                // Лайки, дизлайки и поделиться статьёй
                 Row(
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    //кнопка лайка
+
+                    // Кнопка лайка
                     Button(
                         onClick = {
-
                             when (userVote) {
                                 0 -> {
                                     likes++
@@ -162,29 +176,26 @@ fun ComposeArticleScreen(modifier: Modifier = Modifier) {
                                 .putInt("userVote", userVote)
                                 .apply()
                         },
-
                         colors = ButtonDefaults.buttonColors(
-                            containerColor =
-                                if (userVote == 1) {
-                                    Color.Green
-                                } else {
-                                    Color.Gray
-                                },
+                            containerColor = if (userVote == 1) {
+                                Color.Green
+                            } else {
+                                Color.Gray
+                            },
                             contentColor = Color.Black
                         )
                     ) {
                         Text("👍 $likes")
                     }
 
+                    // Небольшой отступ
                     Spacer(
-                        modifier = Modifier
-                            .height(6.dp)
-                            .padding(2.dp)
+                        modifier = Modifier.padding(6.dp)
                     )
-                    // кноака диза
+
+                    // Кнопка дизлайка
                     Button(
                         onClick = {
-
                             when (userVote) {
                                 0 -> {
                                     dislikes++
@@ -210,24 +221,49 @@ fun ComposeArticleScreen(modifier: Modifier = Modifier) {
                                 .putInt("userVote", userVote)
                                 .apply()
                         },
-
-
                         colors = ButtonDefaults.buttonColors(
-                            containerColor =
-                                if (userVote == -1) {
-                                    Color.Red
-                                } else {
-                                    Color.Gray
-                                },
+                            containerColor = if (userVote == -1) {
+                                Color.Red
+                            } else {
+                                Color.Gray
+                            },
                             contentColor = Color.Black
                         )
                     ) {
                         Text("👎 $dislikes")
                     }
+
+                    // Занимает всё свободное место
+                    Spacer(
+                        modifier = Modifier.weight(1f)
+                    )
+
+                    // Поделиться
+                    Button(
+                        onClick = {
+                            val shareIntent = Intent(Intent.ACTION_SEND).apply {
+                                type = "text/plain"
+                                putExtra(
+                                    Intent.EXTRA_TEXT,
+                                    articleText
+                                )
+                                putExtra(
+                                    Intent.EXTRA_TITLE,
+                                    "Стоковые изображения"
+                                )
+                            }
+
+                            val chooser = Intent.createChooser(
+                                shareIntent,
+                                "Поделиться статьёй"
+                            )
+
+                            context.startActivity(chooser)
+                        }
+                    ) {
+                        Text("Поделиться")
+                    }
                 }
-                Spacer(
-                    modifier = Modifier.height(16.dp)
-                )
 
                 GlideImage(
                     model = "https://cs10.pikabu.ru/post_img/big/2018/09/03/6/153596777311515846.jpg",
@@ -240,15 +276,7 @@ fun ComposeArticleScreen(modifier: Modifier = Modifier) {
                 )
 
                 Text(
-                    text = """
-                        Стоковые изображения - это готовые фотографии и иллюстрации, которые можно использовать в проектах, презентациях и публикациях.
-                         
-                        Они помогают быстро подобрать подходящий визуальный материал без необходимости самостоятельно организовывать съёмку.
-                        
-                        Это невероятно удобно, к тому же среди них можно найти довольно много, так называемых, скрытых гемов, что на наш взгляд, повышает их значимость.
-                        
-                        Зачастую на них присутствуют вотермарки, но это довольно малая цена за их использование
-                    """.trimIndent(),
+                    text = articleText,
 
                     style = MaterialTheme.typography.bodyLarge,
 
