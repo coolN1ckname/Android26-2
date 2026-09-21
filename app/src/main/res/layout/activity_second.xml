@@ -10,7 +10,7 @@
         android:id="@+id/backButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="← Назад" />
+        android:text="←" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -26,7 +26,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Моя статья на View"
+                android:text="Где используются стоковые изображения"
                 android:textSize="28sp"
                 android:textStyle="bold" />
 
@@ -42,8 +42,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="Это уже другая статья. Она создана с использованием обычных вьюх и XML-разметки"
+                android:text="Стоковые изображения часто применяются в рекламе, дизайне сайтов, социальных сетях и мобильных приложениях. Большое количество доступных вариантов позволяет подобрать изображение практически для любой тематики. на предыдущей и на этой статьях вы могли лицезреть эти самые стоковые изображения. Они часто описывают действия или сцены, которые редко, но всё же можно использовать"
                 android:textSize="18sp" />
+
+            <Switch
+                android:id="@+id/readSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Прочитано"
+                android:checked="false" />
 
 
         </LinearLayout>
